@@ -1,0 +1,43 @@
+<head>
+  <title>{{ .Title }}</title>
+
+  {{ "<!-- Meta -->" | safeHTML }}
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="author" content="bslthemes" />
+
+  {{ "<!-- Google Fonts -->" | safeHTML }}
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap" type="text/css" media="all" />
+
+  {{ "<!-- Plugins Stylesheets -->" | safeHTML }}
+  <link rel="stylesheet" href="{{ "plugins/bootstrap/bootstrap.css" | absURL }}" />
+  <link rel="stylesheet" href="{{ "plugins/font-awesome/css/fontawesome.min.css" | absURL }}" />
+  <link rel="stylesheet" href="{{ "plugins/swiper/swiper.css" | absURL }}" />
+  <link rel="stylesheet" href="{{ "plugins/fancybox/jquery.fancybox.min.css" | absURL }}" />
+
+  {{ "<!-- Main Stylesheets -->" | safeHTML }}
+  {{ $style := resources.Get "scss/style.scss" | resources.ToCSS | minify }}
+  <link rel="stylesheet" href="{{ $style.Permalink }}" />
+
+  {{ "<!-- Favicon -->" | safeHTML }}
+  <link rel="icon" href="{{ "images/logo-icon.png" | absURL }}">
+
+  {{ with site.Params.googleAnalytics }}
+  {{ "<!-- Google Analytics -->" | safeHTML }}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ . }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', '{{ . }}');
+  </script>
+  {{ end }}
+
+  {{ range .AlternativeOutputFormats -}}
+  {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ end -}}
+</head>
